@@ -106,7 +106,25 @@ void ABlasterCharacter::LookUp(float Value)
 
 void ABlasterCharacter::EquipButtonPressed()
 {
-	if (Combat && HasAuthority())
+	if (Combat)
+	{
+		if (HasAuthority()) 
+		{
+			Combat->EquipWeapon(OverlappingWeapon);
+
+		}
+		else
+		{
+			ServerEquipButtonPressed();
+		}
+	}
+}
+
+// This is an RPC, so the function is defined in the header file without the implementation
+// the implementation defines what the server must do when the function is called
+void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
+{
+	if (Combat)
 	{
 		Combat->EquipWeapon(OverlappingWeapon);
 	}

@@ -46,6 +46,10 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UCombatComponent* Combat;
 
+	UFUNCTION(Server, Reliable) // Reliable means the server must send confirmation. Do not use reliable RPCs in things like tick
+	void ServerEquipButtonPressed(); // Remote Procedure Call (RPC), called on client executed on server
+
+
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon);
 

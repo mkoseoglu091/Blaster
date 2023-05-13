@@ -30,6 +30,7 @@ protected:
 	void CrouchButtonReleased();
 	void AimButtonPressed();
 	void AimButtonReleased();
+	void AimOffset(float DeltaTime);
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
@@ -53,9 +54,14 @@ private:
 	UFUNCTION(Server, Reliable) // Reliable means the server must send confirmation. Do not use reliable RPCs in things like tick
 	void ServerEquipButtonPressed(); // Remote Procedure Call (RPC), called on client executed on server
 
+	float AO_Yaw;
+	float AO_Pitch;
+	FRotator StartingAimRotation;
 
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();
 	bool IsAiming();
+	FORCEINLINE float GetAO_Yaw() const { return AO_Yaw; }
+	FORCEINLINE float GetAO_Pitch() const { return AO_Pitch; }
 };

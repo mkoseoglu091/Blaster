@@ -56,6 +56,7 @@ private:
 	void ServerEquipButtonPressed(); // Remote Procedure Call (RPC), called on client executed on server
 
 	float AO_Yaw;
+	float InterpAO_Yaw;
 	float AO_Pitch;
 	FRotator StartingAimRotation;
 

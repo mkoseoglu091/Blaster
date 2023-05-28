@@ -24,6 +24,8 @@ public:
 	UFUNCTION(NetMulticast, Unreliable)
 	void MulticastHit();
 
+	virtual void OnRep_ReplicatedMovement() override;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -37,31 +39,33 @@ protected:
 	void AimButtonPressed();
 	void AimButtonReleased();
 	void AimOffset(float DeltaTime);
+	void CalculateAO_Pitch();
+	void SimProxiesTurn();
 	void FireButtonPressed();
 	void FireButtonReleased();
 	void PlayHitReactMontage();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
-	class USpringArmComponent* CameraBoom;
+		class USpringArmComponent* CameraBoom;
 
 	UPROPERTY(VisibleAnywhere, Category = Camera)
-	class UCameraComponent* FollowCamera;
+		class UCameraComponent* FollowCamera;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	class UWidgetComponent* OverheadWidget;
+		class UWidgetComponent* OverheadWidget;
 
 	UPROPERTY(ReplicatedUsing = OnRep_OverlappingWeapon)
-	class AWeapon* OverlappingWeapon;
+		class AWeapon* OverlappingWeapon;
 
 	UFUNCTION()
-	void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
+		void OnRep_OverlappingWeapon(AWeapon* LastWeapon);
 
 	UPROPERTY(VisibleAnywhere)
-	class UCombatComponent* Combat;
+		class UCombatComponent* Combat;
 
 	UFUNCTION(Server, Reliable) // Reliable means the server must send confirmation. Do not use reliable RPCs in things like tick
-	void ServerEquipButtonPressed(); // Remote Procedure Call (RPC), called on client executed on server
+		void ServerEquipButtonPressed(); // Remote Procedure Call (RPC), called on client executed on server
 
 	float AO_Yaw;
 	float InterpAO_Yaw;
@@ -72,17 +76,26 @@ private:
 	void TurnInPlace(float DeltaTime);
 
 	UPROPERTY(EditAnywhere, Category = Combat)
-	class UAnimMontage* FireWeaponMontage;
+		class UAnimMontage* FireWeaponMontage;
 
 	UPROPERTY(EditAnywhere, Category = Combat)
-	UAnimMontage* HitReactMontage;
+		UAnimMontage* HitReactMontage;
 
 	void HideCameraIfCharacterClose();
 
 	UPROPERTY(EditAnywhere)
 	float CameraThreshold = 200.f;
 
-public:	
+	bool bRotateRootBone;
+	
+	float TurnThreshold = 0.5f;
+	FRotator ProxyRotationLastFrame;
+	FRotator ProxyRotation;
+	float ProxyYaw;
+	float TimeSinceLastMovementReplication;
+	float CalculateSpeed();
+
+public:
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();
 	bool IsAiming();
@@ -92,4 +105,5 @@ public:
 	FORCEINLINE ETurningInPlace GetTurningInPlace() const { return TurningInPlace; }
 	FVector GetHitTarget() const;
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	FORCEINLINE bool ShouldRotateRootBone() const { return bRotateRootBone; }
 };

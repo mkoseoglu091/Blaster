@@ -48,6 +48,7 @@ protected:
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
 	void UpdateHUDHealth();
+	void PollInit(); // to init score once character is initialized
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
@@ -156,6 +157,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	class USoundCue* ElimBotSound;
+
+	class ABlasterPlayerState* BlasterPlayerState;
 
 public:
 	void SetOverlappingWeapon(AWeapon* Weapon);

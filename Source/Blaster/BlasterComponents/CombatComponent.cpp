@@ -75,7 +75,7 @@ void UCombatComponent::FireButtonPressed(bool bPressed) // Calls ServerFire whic
 
 void UCombatComponent::Fire()
 {
-	if (bCanFire)
+	if (CanFire())
 	{
 		ServerFire(HitTarget);
 		if (EquippedWeapon)
@@ -319,4 +319,13 @@ void UCombatComponent::ServerSetAiming_Implementation(bool bIsAiming)
 	{
 		Character->GetCharacterMovement()->MaxWalkSpeed = bIsAiming ? AimWalkSpeed : BaseWalkSpeed;
 	}
+}
+
+bool UCombatComponent::CanFire()
+{
+	if (EquippedWeapon == nullptr)
+	{
+		return false;
+	}
+	return !EquippedWeapon->IsEmpty() || !bCanFire;
 }

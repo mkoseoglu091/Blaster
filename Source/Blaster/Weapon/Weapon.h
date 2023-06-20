@@ -56,20 +56,23 @@ public:
 	* Aim Zoom
 	*/
 	UPROPERTY(EditAnywhere)
-		float ZoomedFOV = 30.f;
+	float ZoomedFOV = 30.f;
 
 	UPROPERTY(EditAnywhere)
-		float ZoomInterpSpeed = 20.f;
+	float ZoomInterpSpeed = 20.f;
 
 	/**
 	* Automatic Fire
 	*/
 
 	UPROPERTY(EditAnywhere, Category = Combat)
-		float FireDelay = .15f;
+	float FireDelay = .15f;
 
 	UPROPERTY(EditAnywhere, Category = Combat)
-		bool bAutomatic = true;
+	bool bAutomatic = true;
+
+	UPROPERTY(EditAnywhere)
+	class USoundCue* EquipSound;
 
 protected:
 	virtual void BeginPlay() override;

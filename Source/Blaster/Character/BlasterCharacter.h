@@ -21,6 +21,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void PostInitializeComponents() override;
 	void PlayFireMontage(bool bAiming);
+	void PlayReloadMontage();
 	void PlayElimMontage();
 	virtual void OnRep_ReplicatedMovement() override;
 	void Elim(); // only called on server
@@ -37,6 +38,7 @@ protected:
 	void EquipButtonPressed();
 	void CrouchButtonPressed();
 	void CrouchButtonReleased();
+	void ReloadButtonPressed();
 	void AimButtonPressed();
 	void AimButtonReleased();
 	void AimOffset(float DeltaTime);
@@ -80,8 +82,15 @@ private:
 	ETurningInPlace TurningInPlace;
 	void TurnInPlace(float DeltaTime);
 
+	/**
+	* Animation Montages
+	*/
+
 	UPROPERTY(EditAnywhere, Category = Combat)
 	class UAnimMontage* FireWeaponMontage;
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+		UAnimMontage* ReloadMontage;
 
 	UPROPERTY(EditAnywhere, Category = Combat)
 	UAnimMontage* HitReactMontage;

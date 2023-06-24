@@ -49,7 +49,7 @@ protected:
 	void FireButtonPressed();
 	void FireButtonReleased();
 	void PlayHitReactMontage();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "Damage")
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
 	void UpdateHUDHealth();
 	void PollInit(); // to init score once character is initialized

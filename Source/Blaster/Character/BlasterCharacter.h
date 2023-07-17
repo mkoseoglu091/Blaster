@@ -57,6 +57,8 @@ protected:
 	void UpdateHUDHealth();
 	void PollInit(); // to init score once character is initialized
 	void RotateInPlace(float DeltaTime);
+	void ScoresButtonPressed();
+	void ScoresButtonReleased();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)

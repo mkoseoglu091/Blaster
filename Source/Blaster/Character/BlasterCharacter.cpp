@@ -21,6 +21,8 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Blaster/PlayerState/BlasterPlayerState.h"
 #include "Blaster/Weapon/WeaponTypes.h"
+#include "Blaster/HUD/BlasterHUD.h"
+#include "Blaster/HUD/Announcement.h"
 
 ABlasterCharacter::ABlasterCharacter()
 {
@@ -91,7 +93,11 @@ void ABlasterCharacter::Destroyed()
 	{
 		ElimBotComponent->DestroyComponent();
 	}
-	if (Combat && Combat->EquippedWeapon)
+
+	ABlasterGameMode* BlasterGameMode = Cast<ABlasterGameMode>(UGameplayStatics::GetGameMode(this));
+	bool bMatchNotInProgress = BlasterGameMode && BlasterGameMode->GetMatchState() != MatchState::InProgress;
+
+	if (Combat && Combat->EquippedWeapon && bMatchNotInProgress)
 	{
 		Combat->EquippedWeapon->Destroy();
 	}
@@ -118,6 +124,10 @@ void ABlasterCharacter::MulticastElim_Implementation()
 	GetCharacterMovement()->DisableMovement();
 	GetCharacterMovement()->StopMovementImmediately();
 	bDisableGameplay = true;
+	if (Combat)
+	{
+		Combat->FireButtonPressed(false);
+	}
 
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -204,6 +214,8 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &ABlasterCharacter::FireButtonPressed);
 	PlayerInputComponent->BindAction("Fire", IE_Released, this, &ABlasterCharacter::FireButtonReleased);
 	PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &ABlasterCharacter::ReloadButtonPressed);
+	PlayerInputComponent->BindAction("Score", IE_Pressed, this, &ABlasterCharacter::ScoresButtonPressed);
+	PlayerInputComponent->BindAction("Score", IE_Released, this, &ABlasterCharacter::ScoresButtonReleased);
 }
 
 void ABlasterCharacter::PostInitializeComponents()
@@ -295,6 +307,29 @@ void ABlasterCharacter::ReceiveDamage(AActor* DamagedActor, float Damage, const 
 			ABlasterPlayerController* AttackerController = Cast<ABlasterPlayerController>(InstigatorController);
 			BlasterGameMode->PlayerEliminated(this, BlasterPlayerController, AttackerController);
 		}
+	}
+}
+
+void ABlasterCharacter::ScoresButtonPressed()
+{
+	if (bDisableGameplay) return;
+	BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
+	BlasterPlayerController->UpdateAnnouncement();
+	ABlasterHUD* BlasterHUD = Cast<ABlasterHUD>(BlasterPlayerController->GetHUD());
+	if (BlasterHUD->Announcement)
+	{
+		BlasterHUD->Announcement->SetVisibility(ESlateVisibility::Visible);
+	}
+}
+
+void ABlasterCharacter::ScoresButtonReleased()
+{
+	if (bDisableGameplay) return;
+	BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
+	ABlasterHUD* BlasterHUD = Cast<ABlasterHUD>(BlasterPlayerController->GetHUD());
+	if (BlasterHUD->Announcement)
+	{
+		BlasterHUD->Announcement->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 

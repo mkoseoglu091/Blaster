@@ -31,6 +31,7 @@ public:
 	void OnMatchStateSet(FName State);
 	void HandleMatchHasStarted();
 	void HandleCooldown();
+	void UpdateAnnouncement();
 
 protected:
 	virtual void BeginPlay() override;

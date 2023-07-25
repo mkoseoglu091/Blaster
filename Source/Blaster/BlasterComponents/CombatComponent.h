@@ -28,6 +28,8 @@ public:
 	void FinishReloading();
 	void FireButtonPressed(bool bPressed);
 
+	void PickupAmmo(EWeaponType WeaponType, int32 AmmoAmount);
+
 protected:
 	virtual void BeginPlay() override;
 	void SetAiming(bool bIsAiming);
@@ -56,6 +58,8 @@ protected:
 	void HandleReload();
 
 	int32 AmountToReload();
+
+	void UpdateCarriedAmmo();
 
 private:
 	UPROPERTY()

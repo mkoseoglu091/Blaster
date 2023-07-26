@@ -38,6 +38,9 @@ public:
 	void ShowSniperScopeWidget(bool bShowScope);
 
 	void UpdateHUDHealth();
+	void UpdateHUDAmmo();
+
+	void SpawnDefaultWeapon();
 
 protected:
 	virtual void BeginPlay() override;
@@ -63,6 +66,7 @@ protected:
 	void RotateInPlace(float DeltaTime);
 	void ScoresButtonPressed();
 	void ScoresButtonReleased();
+	
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)
@@ -185,6 +189,13 @@ private:
 
 	UPROPERTY()
 	class ABlasterPlayerState* BlasterPlayerState;
+
+	/**
+	* Default Weapon
+	*/
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AWeapon> DefaultWeaponClass;
 
 public:
 	void SetOverlappingWeapon(AWeapon* Weapon);

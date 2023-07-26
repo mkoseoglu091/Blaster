@@ -82,16 +82,32 @@ void ABlasterCharacter::OnRep_ReplicatedMovement()
 
 void ABlasterCharacter::Elim()
 {
-	if (Combat && Combat->EquippedWeapon)
+	if (Combat)
 	{
-		if (Combat->EquippedWeapon->bDestroyWeapon)
+		if (Combat->EquippedWeapon)
 		{
-			Combat->EquippedWeapon->Destroy();
+			if (Combat->EquippedWeapon->bDestroyWeapon)
+			{
+				Combat->EquippedWeapon->Destroy();
+			}
+			else
+			{
+				Combat->EquippedWeapon->Dropped();
+			}
 		}
-		else
+
+		if (Combat->SecondaryWeapon) 
 		{
-			Combat->EquippedWeapon->Dropped();
+			if (Combat->SecondaryWeapon->bDestroyWeapon)
+			{
+				Combat->SecondaryWeapon->Destroy();
+			}
+			else
+			{
+				Combat->SecondaryWeapon->Dropped();
+			}
 		}
+		
 	}
 	MulticastElim();
 	GetWorldTimerManager().SetTimer(ElimTimer, this, &ABlasterCharacter::ElimTimerFinished, ElimDelay);

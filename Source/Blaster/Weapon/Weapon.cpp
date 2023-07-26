@@ -155,7 +155,7 @@ void AWeapon::SetWeaponState(EWeaponState State)
 		WeaponMesh->SetSimulatePhysics(false);
 		WeaponMesh->SetEnableGravity(false);
 		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		
+		EnableCustomDepth(false);
 		break;
 	case EWeaponState::EWS_Dropped:
 		if (HasAuthority())
@@ -173,6 +173,16 @@ void AWeapon::SetWeaponState(EWeaponState State)
 		WeaponMesh->MarkRenderStateDirty();
 		EnableCustomDepth(true);
 		
+		break;
+	case EWeaponState::EWS_EquippedSecondary:
+		ShowPickupWidget(false);
+		AreaSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		WeaponMesh->SetSimulatePhysics(false);
+		WeaponMesh->SetEnableGravity(false);
+		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		EnableCustomDepth(true);
+		WeaponMesh->SetCustomDepthStencilValue(CUSTOM_DEPTH_TAN);
+		WeaponMesh->MarkRenderStateDirty();
 		break;
 	}
 	
@@ -188,6 +198,7 @@ void AWeapon::OnRep_WeaponState()
 		WeaponMesh->SetSimulatePhysics(false);
 		WeaponMesh->SetEnableGravity(false);
 		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		EnableCustomDepth(false);
 
 		break;
 	case EWeaponState::EWS_Dropped:
@@ -206,6 +217,16 @@ void AWeapon::OnRep_WeaponState()
 		WeaponMesh->MarkRenderStateDirty();
 		EnableCustomDepth(true);
 
+		break;
+	case EWeaponState::EWS_EquippedSecondary:
+		ShowPickupWidget(false);
+		AreaSphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		WeaponMesh->SetSimulatePhysics(false);
+		WeaponMesh->SetEnableGravity(false);
+		WeaponMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		EnableCustomDepth(true);
+		WeaponMesh->SetCustomDepthStencilValue(CUSTOM_DEPTH_TAN);
+		WeaponMesh->MarkRenderStateDirty();
 		break;
 	}
 }

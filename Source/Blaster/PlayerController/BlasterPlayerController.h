@@ -34,6 +34,8 @@ public:
 	void HandleCooldown();
 	void UpdateAnnouncement();
 
+	void BroadcastElim(APlayerState* Attacker, APlayerState* Victim);
+
 protected:
 
 	
@@ -68,6 +70,9 @@ protected:
 	void ClientJoinMidgame(FName StateOfMatch, float Warmup, float Match, float Cooldown, float StartingTime);
 
 	void ShowReturnToMainMenu();
+
+	UFUNCTION(Client, Reliable)
+	void ClientElimAnnouncement(APlayerState* Attacker, APlayerState* Victim);
 
 private:
 	UPROPERTY()

@@ -15,6 +15,7 @@ class BLASTER_API ABlasterPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
+
 	void SetHUDHealth(float Health, float MaxHealth);
 	void SetHUDScore(float Score);
 	void SetHUDDefeats(int32 Defeats);
@@ -34,10 +35,13 @@ public:
 	void UpdateAnnouncement();
 
 protected:
+
+	
 	virtual void BeginPlay() override;
 	void SetHUDTime();
 
 	void PollInit();
+	virtual void SetupInputComponent() override;
 
 	/**
 	* Time Sync
@@ -63,9 +67,22 @@ protected:
 	UFUNCTION(Client, Reliable)
 	void ClientJoinMidgame(FName StateOfMatch, float Warmup, float Match, float Cooldown, float StartingTime);
 
+	void ShowReturnToMainMenu();
+
 private:
 	UPROPERTY()
 	class ABlasterHUD* BlasterHUD;
+
+	/**
+	* Return to Menu
+	*/
+	UPROPERTY(EditAnywhere, Category = HUD)
+	TSubclassOf<class UUserWidget> ReturnToMainMenuWidget;
+
+	UPROPERTY()
+	class UReturnToMainMenu* ReturnToMainMenu;
+
+	bool bReturnToMainMenuOpen = false;
 
 	UPROPERTY()
 	class ABlasterGameMode* BlasterGameMode;

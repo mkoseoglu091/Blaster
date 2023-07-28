@@ -52,7 +52,7 @@ protected:
 	
 private:
 	UPROPERTY()
-		class APlayerController* OwningPlayer;
+	class APlayerController* OwningPlayer;
 
 	FHUDPackage HUDPackage;
 	void DrawCrosshair(UTexture2D* Texture, FVector2D ViewportCenter, FVector2D Spread, FLinearColor CrosshairsColor);
@@ -62,6 +62,15 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UElimAnnouncement> ElimAnnouncementClass;
+
+	UPROPERTY(EditAnywhere)
+	float ElimAnnouncementTime = 3.f;
+
+	UFUNCTION()
+	void ElimAnnouncementTimerFinished(UElimAnnouncement* MsgToRemove);
+
+	UPROPERTY()
+	TArray<UElimAnnouncement*> ElimMessages;
 
 public:
 	FORCEINLINE void SetHUDPackage(const FHUDPackage& Package) { HUDPackage = Package; }
